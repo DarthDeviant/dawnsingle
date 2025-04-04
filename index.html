@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #FFD1DC, #BDE0FE);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .player {
+            width: 400px;
+            background: #2C2C2E;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .album-art {
+            width: 150px;
+            height: 150px;
+            background: url('cover.png') no-repeat center center;
+            background-size: cover;
+            margin: auto;
+            border-radius: 12px;
+        }
+        .track-info {
+            margin-top: 15px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .button {
+            width: 50px;
+            height: 50px;
+            background: #3A3A3C;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            font-size: 1.2rem;
+        }
+        .button:hover {
+            background: #555;
+            transform: scale(1.1);
+        }
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #444;
+            margin-top: 20px;
+            border-radius: 5px;
+            position: relative;
+            cursor: pointer;
+        }
+        .progress-bar {
+            height: 6px;
+            background: white;
+            width: 0%;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="player">
+        <div class="album-art" id="album-art"></div>
+        <div class="track-info">
+            <h3>Pablo</h3>
+            <p>Kanye West — Donda 2</p>
+        </div>
+        <audio id="audio" src="song.wav"></audio>
+        <div class="progress-container" onclick="setProgress(event)">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="controls">
+            <div class="button" onclick="rewind()">⏪</div>
+            <div class="button" onclick="togglePlayPause()">⏯️</div>
+            <div class="button" onclick="forward()">⏩</div>
+        </div>
+    </div>
+    <script>
+        const audio = document.getElementById('audio');
+        const progressBar = document.getElementById('progress-bar');
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+        function rewind() {
+            audio.currentTime -= 10;
+        }
+        function forward() {
+            audio.currentTime += 10;
+        }
+        function updateProgress() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+        }
+        function setProgress(event) {
+            const width = event.currentTarget.clientWidth;
+            const clickX = event.offsetX;
+            const duration = audio.duration;
+            audio.currentTime = (clickX / width) * duration;
+        }
+        audio.addEventListener('timeupdate', updateProgress);
+    </script>
+</body>
+</html>
